@@ -3,7 +3,7 @@ const { Client, Collection, Intents } = require('discord.js');
 const { token } = require('./config.json');
 const output = require('./src/discordoutput');
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+const client = new Client({ intents: [Intents.FLAGS.GUILDS,Intents.FLAGS.GUILD_PRESENCES]});
 
 client.commands = new Collection();
 const commandFiles = fs.readdirSync('./src/commands').filter(file => file.endsWith('.js'));
@@ -17,6 +17,7 @@ for (const file of commandFiles) {
 
 for (const file of eventFiles) {
 	const event = require(`./src/events/${file}`);
+	console.log(`${file} loaded`);
 	if (event.once) {
 		client.once(event.name, (...args) => event.execute(...args));
 	} else {

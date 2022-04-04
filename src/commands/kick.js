@@ -17,10 +17,18 @@ module.exports = {
         const value = interaction.options.getString('reason');
         const user = interaction.options.getMember('target');
         if (interaction.member.permissions.has('KICK_MEMBERS')) {
-
+            if (!user.roles.highest.position >= interaction.member.roles.highest.position) {
             try {
-                await user.kick(value);
-                await interaction.reply('Kicked successfully')
+                try {
+                    await user.kick(value)
+                    .catch((err) => {
+                        output.errorlog(err)
+                    })
+        await interaction.reply('Kicked successfully')
+                } catch {
+                    await interaction.reply('Failed to kick')
+                }
+
                 try {
                     await user.send(`Your have been kicked from ${interaction.guild.name}. For reason ${value}`);
                 } catch (error) {
@@ -35,5 +43,10 @@ module.exports = {
         } else {
             return interaction.reply({ content: 'Missing Perms for that interaction!', ephemeral: true })
         }
-    },
+    } else {
+        return interaction.reply({
+            content: 'Missing Perms for that interaction!',
+            ephemeral: true
+        })
+    }},
 };
