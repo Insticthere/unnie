@@ -1,7 +1,4 @@
-// make a 8ball command
 const {SlashCommandBuilder, Permissions} = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
-const { memeget } = require('../memes')
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -10,7 +7,6 @@ module.exports = {
         .addStringOption(option => option.setName('question').setDescription('question to the 8ball!')),
 
     async execute(interaction) {
-        // make 8ball
         const answers = [
             'It is certain',
             'It is decidedly so',

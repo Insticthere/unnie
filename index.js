@@ -1,9 +1,9 @@
 const fs = require('node:fs');
 const { Client, Collection, Intents } = require('discord.js');
-const { token } = require('./config.json');
 const output = require('./src/discordoutput');
+require('dotenv').config();
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS,Intents.FLAGS.GUILD_PRESENCES]});
+const client = new Client({ intents: [Intents.FLAGS.GUILDS,Intents.FLAGS.GUILD_PRESENCES, Intents.FLAGS.GUILD_MESSAGES]});
 
 client.commands = new Collection();
 const commandFiles = fs.readdirSync('./src/commands').filter(file => file.endsWith('.js'));
@@ -40,20 +40,20 @@ client.on('interactionCreate', async interaction => {
 	}
 });
 
-// client.on('error', async err => {
-//     output.errorlog(err);
-// });
+client.on('error', async err => {
+    output.errorlog(err);
+});
 
-// client.on('invalidRequestWarning', async err => {
-//     output.errorlog(err);
-// });
+client.on('invalidRequestWarning', async err => {
+    output.errorlog(err);
+});
 
-// process.on('uncaughtException', async err => {
-//     output.errorlog(err);
-// });
+process.on('uncaughtException', async err => {
+    output.errorlog(err);
+});
 
-// process.on('unhandledRejection', async err => {
-//     output.errorlog(err);
-// });
+process.on('unhandledRejection', async err => {
+    output.errorlog(err);
+});
 
-client.login(token);
+client.login(process.env.TOKEN);

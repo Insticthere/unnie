@@ -1,6 +1,5 @@
 const {SlashCommandBuilder, Permissions} = require('@discordjs/builders');
 const { MessageEmbed } = require('discord.js');
-const output = require('../discordoutput');
 
 module.exports = {
 
@@ -22,7 +21,14 @@ module.exports = {
             .setDescription(message)
             .setColor(color);
         if (interaction.member.permissions.has('MANAGE_MESSAGES')) {
-            await channel.send({embeds : [embed]});
+            try {
+                await channel.send({embeds : [embed]});
+                await interaction.reply({ content: 'Message sent!', ephemeral: true });
+            } catch {
+                await interaction.reply({ content: 'There was an error while sending the message! make sure the `color` is valid!', ephemeral: true });
+                await output.errorlog(err);
+            }
+        
         }
         else {
             return interaction.reply({ content: 'Missing Perms for that interaction!', ephemeral: true })

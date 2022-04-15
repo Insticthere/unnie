@@ -1,8 +1,8 @@
 const axios = require('axios')
-var URL = "https://discord.com/api/webhooks/957632219558584400/Xhb2Qk4U73f8PfnRhoc7b6b6j-fNtbrccJxxahzq0sYrYwffOrkvjo6cLTXtlydzetT-";
+require('dotenv').config();
 
 function errorlog(contentString) {
-    axios.post(URL, {
+    axios.post(process.env.WEBHOOK, {
       "content":contentString
        })
       .then()
