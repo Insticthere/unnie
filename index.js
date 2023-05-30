@@ -1,11 +1,12 @@
 const fs = require('node:fs');
-const { Client, Collection, Intents } = require('discord.js');
-const output = require('./src/discordoutput');
 require('dotenv').config();
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS,Intents.FLAGS.GUILD_PRESENCES, Intents.FLAGS.GUILD_MESSAGES]});
+const { Client, GatewayIntentBits, Partials, Collection} = require('discord.js');
+
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers,  GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMessages], partials: [Partials.Channel] });
 
 client.commands = new Collection();
+
 const commandFiles = fs.readdirSync('./src/commands').filter(file => file.endsWith('.js'));
 const eventFiles = fs.readdirSync('./src/events').filter(file => file.endsWith('.js'));
 
@@ -41,19 +42,19 @@ client.on('interactionCreate', async interaction => {
 });
 
 client.on('error', async err => {
-    output.errorlog(err);
+    console.log(err);
 });
 
 client.on('invalidRequestWarning', async err => {
-    output.errorlog(err);
+    console.log(err);
 });
 
 process.on('uncaughtException', async err => {
-    output.errorlog(err);
+    console.log(err);
 });
 
 process.on('unhandledRejection', async err => {
-    output.errorlog(err);
+    console.log(err);
 });
 
 client.login(process.env.TOKEN);
